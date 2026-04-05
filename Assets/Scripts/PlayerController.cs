@@ -12,13 +12,11 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        // Oyun başladığında topun fiziksel yapısını (Rigidbody) kodun içine alıyoruz ki onu itebilelim.
         rb = GetComponent<Rigidbody>();
     }
 
     void OnMove(InputValue movementValue)
     {
-        // Klavyeden (WASD veya ok tuşları) gelen yön bilgilerini alıyoruz.
         Vector2 movementVector = movementValue.Get<Vector2>();
         movementX = movementVector.x;
         movementY = movementVector.y;
@@ -26,8 +24,15 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        // Topa X ve Z eksenlerinde (ileri-geri, sağa-sola) güç uygulayarak itiyoruz.
         Vector3 movement = new Vector3(movementX, 0.0f, movementY);
         rb.AddForce(movement * speed);
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("PickUp"))
+        {
+            other.gameObject.SetActive(false);
+        }
     }
 }
